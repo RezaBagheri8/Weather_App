@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/container_component"
+    android:layout_width="70dp"
+    android:layout_height="150dp"
+    android:background="@drawable/hourly_container"
+    android:clipToPadding="false"
+    android:gravity="center"
+    android:orientation="vertical"
+    android:paddingBottom="15.5dp"
+    android:paddingLeft="8dp"
+    android:paddingRight="8dp"
+    android:paddingTop="16dp">
+  
+  <TextView
+    android:id="@+id/text_hour"
+    android:layout_width="wrap_content"
+    android:layout_height="20dp"
+    android:includeFontPadding="false"
+    android:maxLines="1"
+    android:singleLine="true"
+    android:text="1 AM"
+    android:textColor="#000000"
+    android:textSize="15dp" />
+  
+  <FrameLayout
+    android:id="@+id/hourly_icon_container"
+    android:layout_width="44dp"
+    android:layout_height="38dp"
+    android:layout_marginTop="16dp"
+    android:paddingBottom="10dp"
+    android:paddingTop="4dp">
+    
+    <ImageView
+      android:id="@+id/hourly_icon"
+      android:layout_width="32dp"
+      android:layout_height="32dp"
+      android:scaleType="centerInside"
+      android:src="@drawable/hourly_icon" />
+  </FrameLayout>
+  
+  <TextView
+    android:id="@+id/text_degree"
+    android:layout_width="wrap_content"
+    android:layout_height="25dp"
+    android:layout_marginTop="15.5dp"
+    android:gravity="left|center_vertical"
+    android:includeFontPadding="false"
+    android:maxLines="1"
+    android:singleLine="true"
+    android:text="19°"
+    android:textColor="#FFFFFFFF"
+    android:textSize="20dp" />
+</LinearLayout>
