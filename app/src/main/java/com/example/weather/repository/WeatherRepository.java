@@ -22,8 +22,8 @@ public class WeatherRepository {
     }
 
     public void getWeather(double latitude, double longitude, WeatherCallback callback) {
-        weatherApi.getWeather(latitude, longitude, "temperature_180m,rain,snowfall",
-                "temperature_180m,rain,snowfall", 1, "auto")
+        weatherApi.getWeather(latitude, longitude, "temperature_2m,rain,snowfall",
+                "temperature_2m,rain,snowfall", 1, "auto")
             .enqueue(new Callback<WeatherResponse>() {
                 @Override
                 public void onResponse(Call<WeatherResponse> call, Response<WeatherResponse> response) {

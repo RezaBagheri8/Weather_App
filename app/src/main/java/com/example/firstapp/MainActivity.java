@@ -74,7 +74,9 @@ public class MainActivity extends AppCompatActivity {
         List<HourlyWeatherDto> updatedList = new ArrayList<>();
 
         List<String> times = weatherResponse.getHourly().getTime();
-        List<Double> temperatures = weatherResponse.getHourly().getTemperature180m();
+        List<Double> temperatures = weatherResponse.getHourly().getTemperature2m();
+        List<Double> rains = weatherResponse.getHourly().getRain();
+        List<Double> snowFalls = weatherResponse.getHourly().getSnowfall();
 
         for (int i = 0; i < times.size(); i++) {
             String hour = times.get(i);
@@ -90,13 +92,40 @@ public class MainActivity extends AppCompatActivity {
             }
 
             String temperature = temperatures.get(i) + "°";
+            Double rain = rains.get(i);
+            Double snowFall = snowFalls.get(i);
 
-            int iconResource = R.drawable.hourly_icon;
+            int hourInt = Integer.parseInt(hour.substring(0, 2));
+            int iconResource = getIconResource(rain, snowFall, hourInt);
+
             updatedList.add(new HourlyWeatherDto(hour, temperature, iconResource));
         }
 
         hourlyWeatherList.clear();
         hourlyWeatherList.addAll(updatedList);
         adapter.notifyDataSetChanged();
+    }
+
+    private static int getIconResource(Double rain, Double snowFall, int hourInt) {
+        int iconResource;
+
+        if(hourInt > 6 && hourInt < 17)
+            iconResource = R.drawable.sunny;
+        else
+            iconResource = R.drawable.moony;
+
+        if(rain > 0 && rain > snowFall)
+        {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                if(hourInt > 6 && hourInt < 17)
+                    iconResource = R.drawable.rain_day;
+                else
+                    iconResource = R.drawable.rain_night;
+            }
+        }
+        if(snowFall > 0 && snowFall > rain){
+            iconResource = R.drawable.snow_day;
+        }
+        return iconResource;
     }
 }

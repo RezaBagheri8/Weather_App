@@ -37,7 +37,7 @@
       android:layout_width="32dp"
       android:layout_height="32dp"
       android:scaleType="centerInside"
-      android:src="@drawable/hourly_icon" />
+      android:src="@drawable/rain_day" />
   </FrameLayout>
   
   <TextView
