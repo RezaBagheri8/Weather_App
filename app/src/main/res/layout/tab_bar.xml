@@ -3,7 +3,6 @@
 <FrameLayout
   xmlns:android="http://schemas.android.com/apk/res/android"
   xmlns:app="http://schemas.android.com/apk/res-auto"
-  xmlns:tools="http://schemas.android.com/tools"
   android:layout_width="match_parent"
   android:layout_height="100dp">
   
@@ -46,7 +45,6 @@
           app:layout_constraintTop_toTopOf="parent"
           app:tint="@android:color/white" />
       </FrameLayout>
-      <!-- I68:4450;61:8087:space-view0 Frame 3_space_view0 space-view -->
       <View
         android:layout_width="0dp"
         android:layout_height="44dp"

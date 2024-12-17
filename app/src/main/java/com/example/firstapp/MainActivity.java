@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.widget.FrameLayout;
+import android.widget.TextView;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
@@ -16,13 +17,19 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.Adapters.HourlyWeatherAdapter;
 import com.example.Adapters.HourlyWeatherDto;
+import com.example.Adapters.ItemMarginDecoration;
+import com.example.weather.data.Current;
+import com.example.weather.data.Hourly;
 import com.example.weather.data.WeatherResponse;
 import com.example.weather.viewmodel.WeatherViewModel;
 
+import java.text.MessageFormat;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
+import java.util.Objects;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -51,6 +58,8 @@ public class MainActivity extends AppCompatActivity {
 
         hourlyRecyclerView = findViewById(R.id.hourlyRecyclerView);
         hourlyRecyclerView.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
+        int margin = getResources().getDimensionPixelSize(R.dimen.item_margin);
+        hourlyRecyclerView.addItemDecoration(new ItemMarginDecoration(margin));
 
         weatherViewModel = new ViewModelProvider(this).get(WeatherViewModel.class);
 
@@ -58,9 +67,30 @@ public class MainActivity extends AppCompatActivity {
         adapter = new HourlyWeatherAdapter(hourlyWeatherList);
         hourlyRecyclerView.setAdapter(adapter);
 
+        // Assuming you have the weather data
+        TextView cityNameTxt = findViewById(R.id.text_city_name);
+        TextView temperatureTxt = findViewById(R.id.text_temperature);
+        TextView weatherConditionTxt = findViewById(R.id.text_weather_condition);
+        TextView highLowTempTxt = findViewById(R.id.text_high_low);
+
+
         weatherViewModel.getWeatherData().observe(this, weatherResponse -> {
             if (weatherResponse != null && weatherResponse.getHourly() != null) {
                 updateHourlyWeatherList(weatherResponse);
+
+                Current current = weatherResponse.getCurrent();
+                Hourly hourly = weatherResponse.getHourly();
+                Double maximumTemp = Collections.max(hourly.getTemperature2m());
+                Double minimumTemp = Collections.min(hourly.getTemperature2m());
+
+                String city = getIntent().getStringExtra("City");
+                if(Objects.equals(city, null))
+                    city = "Mashhad";
+
+                cityNameTxt.setText(city);
+                temperatureTxt.setText(Double.toString(current.getTemperature2m()));
+                weatherConditionTxt.setText("Mostly Clear");
+                highLowTempTxt.setText(MessageFormat.format("H:{0}°   L:{1}°", maximumTemp, minimumTemp));
             }
         });
 

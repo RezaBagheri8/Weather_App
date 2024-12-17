@@ -36,6 +36,7 @@ public class CitiesActivity extends AppCompatActivity {
             Intent intent = new Intent(this, MainActivity.class);
             intent.putExtra("LATITUDE", latitude);
             intent.putExtra("LONGITUDE", longitude);
+            intent.putExtra("City", city.getName());
             startActivity(intent);
         });
 
