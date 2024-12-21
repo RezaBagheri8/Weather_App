@@ -67,7 +67,6 @@ public class MainActivity extends AppCompatActivity {
         adapter = new HourlyWeatherAdapter(hourlyWeatherList);
         hourlyRecyclerView.setAdapter(adapter);
 
-        // Assuming you have the weather data
         TextView cityNameTxt = findViewById(R.id.text_city_name);
         TextView temperatureTxt = findViewById(R.id.text_temperature);
         TextView weatherConditionTxt = findViewById(R.id.text_weather_condition);

@@ -4,12 +4,8 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
-import com.example.weather.data.Hourly;
 import com.example.weather.data.WeatherResponse;
 import com.example.weather.repository.WeatherRepository;
-
-import java.util.Collections;
-import java.util.List;
 
 public class WeatherViewModel extends ViewModel {
     private final WeatherRepository repository;

@@ -23,7 +23,6 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.044">
 
-        <!-- City Name -->
         <TextView
             android:id="@+id/text_city_name"
             android:layout_width="wrap_content"

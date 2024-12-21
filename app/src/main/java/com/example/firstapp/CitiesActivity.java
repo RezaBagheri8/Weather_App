@@ -2,7 +2,6 @@ package com.example.firstapp;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
@@ -30,8 +29,6 @@ public class CitiesActivity extends AppCompatActivity {
         CityAdapter adapter = new CityAdapter(cities, city -> {
             double latitude = city.getLatitude();
             double longitude = city.getLongitude();
-
-            Toast.makeText(this, "Selected: " + city.getName(), Toast.LENGTH_SHORT).show();
 
             Intent intent = new Intent(this, MainActivity.class);
             intent.putExtra("LATITUDE", latitude);
