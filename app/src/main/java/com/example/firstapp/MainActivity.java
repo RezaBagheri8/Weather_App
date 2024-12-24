@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.widget.FrameLayout;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.activity.EdgeToEdge;
@@ -31,7 +32,25 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 
+import android.Manifest;
+import android.content.Context;
+import android.content.pm.PackageManager;
+import android.location.Location;
+import android.location.LocationManager;
+import android.provider.Settings;
+import android.widget.Toast;
+
+import androidx.annotation.NonNull;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
+
+import com.google.android.gms.location.FusedLocationProviderClient;
+import com.google.android.gms.location.LocationServices;
+
 public class MainActivity extends AppCompatActivity {
+
+    private static final int LOCATION_PERMISSION_REQUEST_CODE = 100;
+    private FusedLocationProviderClient fusedLocationClient;
 
     private RecyclerView hourlyRecyclerView;
     private HourlyWeatherAdapter adapter;
@@ -54,6 +73,15 @@ public class MainActivity extends AppCompatActivity {
         citiesBtn.setOnClickListener(v -> {
             Intent intent = new Intent(this, CitiesActivity.class);
             startActivity(intent);
+        });
+
+        fusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
+
+        ImageView locationIcon = findViewById(R.id.location_icon);
+        locationIcon.setOnClickListener(view -> {
+            if (checkLocationPermission()) {
+                checkAndEnableLocation();
+            }
         });
 
         hourlyRecyclerView = findViewById(R.id.hourlyRecyclerView);
@@ -156,5 +184,56 @@ public class MainActivity extends AppCompatActivity {
             iconResource = R.drawable.snow_day;
         }
         return iconResource;
+    }
+
+    private boolean checkLocationPermission() {
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)
+                != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(this,
+                    new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
+                    LOCATION_PERMISSION_REQUEST_CODE);
+            return false;
+        }
+        return true;
+    }
+
+    private void checkAndEnableLocation() {
+        LocationManager locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+        if (!locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
+            Toast.makeText(this, "Please enable location services", Toast.LENGTH_SHORT).show();
+            Intent intent = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
+            startActivity(intent);
+        } else {
+            getCurrentLocation();
+        }
+    }
+
+    private void getCurrentLocation() {
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            return;
+        }
+        fusedLocationClient.getLastLocation().addOnCompleteListener(task -> {
+            Location location = task.getResult();
+            if (location != null) {
+                double latitude = location.getLatitude();
+                double longitude = location.getLongitude();
+
+                weatherViewModel.fetchWeather(latitude, longitude);
+            } else {
+                Toast.makeText(MainActivity.this, "Unable to get location", Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        if (requestCode == LOCATION_PERMISSION_REQUEST_CODE) {
+            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                checkAndEnableLocation();
+            } else {
+                Toast.makeText(this, "Location permission denied", Toast.LENGTH_SHORT).show();
+            }
+        }
     }
 }
