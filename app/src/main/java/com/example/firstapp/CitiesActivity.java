@@ -25,7 +25,7 @@ public class CitiesActivity extends AppCompatActivity {
         RecyclerView recyclerView = findViewById(R.id.recyclerView);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
-        List<CityModel> cities = CityData.getCities();
+        List<CityModel> cities = CityData.FavoriteCities;
         CityAdapter adapter = new CityAdapter(cities, city -> {
             double latitude = city.getLatitude();
             double longitude = city.getLongitude();

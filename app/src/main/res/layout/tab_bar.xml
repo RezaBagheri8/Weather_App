@@ -85,6 +85,7 @@
       android:src="@drawable/drawable_image_1" />
     
     <ImageView
+      android:id="@+id/addCityBtn"
       android:layout_width="64dp"
       android:layout_height="64dp"
       android:layout_marginLeft="97dp"

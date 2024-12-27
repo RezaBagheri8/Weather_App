@@ -3,11 +3,15 @@ package com.example.firstapp;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.activity.EdgeToEdge;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
@@ -16,9 +20,11 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.Adapters.DialogCityAdaptor;
 import com.example.Adapters.HourlyWeatherAdapter;
 import com.example.Adapters.HourlyWeatherDto;
 import com.example.Adapters.ItemMarginDecoration;
+import com.example.weather.data.CityData;
 import com.example.weather.data.Current;
 import com.example.weather.data.Hourly;
 import com.example.weather.data.WeatherResponse;
@@ -74,6 +80,8 @@ public class MainActivity extends AppCompatActivity {
             Intent intent = new Intent(this, CitiesActivity.class);
             startActivity(intent);
         });
+
+        findViewById(R.id.addCityBtn).setOnClickListener(v -> showCitySelectorDialog());
 
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
 
@@ -161,6 +169,34 @@ public class MainActivity extends AppCompatActivity {
         hourlyWeatherList.clear();
         hourlyWeatherList.addAll(updatedList);
         adapter.notifyDataSetChanged();
+    }
+
+    private void showCitySelectorDialog() {
+        LayoutInflater inflater = LayoutInflater.from(this);
+        View dialogView = inflater.inflate(R.layout.city_selector_dialog, null);
+
+        AlertDialog dialog = new AlertDialog.Builder(this, R.style.Theme_MyApp_Dialog)
+                .setView(dialogView)
+                .create();
+
+        int width = (int) (300 * getResources().getDisplayMetrics().density);
+        int height = (int) (400 * getResources().getDisplayMetrics().density);
+        dialog.getWindow().setLayout(width, height);
+
+        RecyclerView recyclerView = dialogView.findViewById(R.id.recyclerViewCities);
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        DialogCityAdaptor adapter = new DialogCityAdaptor(CityData.getCities(), city -> {
+            if(CityData.FavoriteCities.stream().noneMatch(c -> c.getName().equals(city.getName())))
+                CityData.FavoriteCities.add(city);
+
+            dialog.dismiss();
+        });
+        recyclerView.setAdapter(adapter);
+
+        Button closeButton = dialogView.findViewById(R.id.closeButton);
+        closeButton.setOnClickListener(v -> dialog.dismiss());
+
+        dialog.show();
     }
 
     private static int getIconResource(Double rain, Double snowFall, int hourInt) {
