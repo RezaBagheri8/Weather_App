@@ -1,5 +1,7 @@
 package com.example.firstapp;
 
+import static androidx.core.location.LocationManagerCompat.getCurrentLocation;
+
 import android.animation.AnimatorInflater;
 import android.animation.ObjectAnimator;
 import android.animation.ValueAnimator;
@@ -20,6 +22,15 @@ import android.widget.TextView;
 
 import androidx.activity.EdgeToEdge;
 import androidx.annotation.NonNull;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.widget.Button;
+import android.widget.FrameLayout;
+import android.widget.ImageView;
+import android.widget.TextView;
+
+import androidx.activity.EdgeToEdge;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
@@ -28,9 +39,11 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.Adapters.DialogCityAdaptor;
 import com.example.Adapters.HourlyWeatherAdapter;
 import com.example.Adapters.HourlyWeatherDto;
 import com.example.Adapters.ItemMarginDecoration;
+import com.example.weather.data.CityData;
 import com.example.weather.data.Current;
 import com.example.weather.data.Hourly;
 import com.example.weather.data.WeatherResponse;
@@ -45,7 +58,25 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 
+import android.Manifest;
+import android.content.Context;
+import android.content.pm.PackageManager;
+import android.location.Location;
+import android.location.LocationManager;
+import android.provider.Settings;
+import android.widget.Toast;
+
+import androidx.annotation.NonNull;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
+
+import com.google.android.gms.location.FusedLocationProviderClient;
+import com.google.android.gms.location.LocationServices;
+
 public class MainActivity extends AppCompatActivity {
+
+    private static final int LOCATION_PERMISSION_REQUEST_CODE = 100;
+    private FusedLocationProviderClient fusedLocationClient;
 
     private RecyclerView hourlyRecyclerView;
     private HourlyWeatherAdapter adapter;
@@ -111,6 +142,17 @@ public class MainActivity extends AppCompatActivity {
             startActivity(intent);
         });
 
+        findViewById(R.id.addCityBtn).setOnClickListener(v -> showCitySelectorDialog());
+
+        fusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
+
+        ImageView locationIcon = findViewById(R.id.location_icon);
+        locationIcon.setOnClickListener(view -> {
+            if (checkLocationPermission()) {
+                checkAndEnableLocation();
+            }
+        });
+
         hourlyRecyclerView = findViewById(R.id.hourlyRecyclerView);
         hourlyRecyclerView.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
         int margin = getResources().getDimensionPixelSize(R.dimen.item_margin);
@@ -122,7 +164,6 @@ public class MainActivity extends AppCompatActivity {
         adapter = new HourlyWeatherAdapter(hourlyWeatherList);
         hourlyRecyclerView.setAdapter(adapter);
 
-        // Assuming you have the weather data
         TextView cityNameTxt = findViewById(R.id.text_city_name);
         TextView temperatureTxt = findViewById(R.id.text_temperature);
         TextView weatherConditionTxt = findViewById(R.id.text_weather_condition);
@@ -198,6 +239,34 @@ public class MainActivity extends AppCompatActivity {
         adapter.notifyDataSetChanged();
     }
 
+    private void showCitySelectorDialog() {
+        LayoutInflater inflater = LayoutInflater.from(this);
+        View dialogView = inflater.inflate(R.layout.city_selector_dialog, null);
+
+        AlertDialog dialog = new AlertDialog.Builder(this, R.style.Theme_MyApp_Dialog)
+                .setView(dialogView)
+                .create();
+
+        int width = (int) (300 * getResources().getDisplayMetrics().density);
+        int height = (int) (400 * getResources().getDisplayMetrics().density);
+        dialog.getWindow().setLayout(width, height);
+
+        RecyclerView recyclerView = dialogView.findViewById(R.id.recyclerViewCities);
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        DialogCityAdaptor adapter = new DialogCityAdaptor(CityData.getCities(), city -> {
+            if(CityData.FavoriteCities.stream().noneMatch(c -> c.getName().equals(city.getName())))
+                CityData.FavoriteCities.add(city);
+
+            dialog.dismiss();
+        });
+        recyclerView.setAdapter(adapter);
+
+        Button closeButton = dialogView.findViewById(R.id.closeButton);
+        closeButton.setOnClickListener(v -> dialog.dismiss());
+
+        dialog.show();
+    }
+
     private static int getIconResource(Double rain, Double snowFall, int hourInt) {
         int iconResource;
 
@@ -258,5 +327,58 @@ public class MainActivity extends AppCompatActivity {
 
     private int dpToPx(int dp) {
         return (int) (dp * getResources().getDisplayMetrics().density);
+    }
+    private boolean checkLocationPermission() {
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)
+                != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(this,
+                    new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
+                    LOCATION_PERMISSION_REQUEST_CODE);
+            return false;
+        }
+        return true;
+    }
+
+    private void checkAndEnableLocation() {
+        LocationManager locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+        if (!locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
+            Toast.makeText(this, "Please enable location services", Toast.LENGTH_SHORT).show();
+            Intent intent = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
+            startActivity(intent);
+        } else {
+            getCurrentLocation();
+        }
+    }
+
+    private void getCurrentLocation() {
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            return;
+        }
+        fusedLocationClient.getLastLocation().addOnCompleteListener(task -> {
+            Location location = task.getResult();
+            if (location != null) {
+                double latitude = location.getLatitude();
+                double longitude = location.getLongitude();
+
+                weatherViewModel.fetchWeather(latitude, longitude);
+
+                TextView cityNameTxt = findViewById(R.id.text_city_name);
+                cityNameTxt.setText("Your Location");
+            } else {
+                Toast.makeText(MainActivity.this, "Unable to get location", Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        if (requestCode == LOCATION_PERMISSION_REQUEST_CODE) {
+            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                checkAndEnableLocation();
+            } else {
+                Toast.makeText(this, "Location permission denied", Toast.LENGTH_SHORT).show();
+            }
+        }
     }
 }

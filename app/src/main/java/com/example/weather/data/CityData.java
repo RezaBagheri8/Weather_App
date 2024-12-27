@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class CityData {
+    public static List<CityModel> FavoriteCities = new ArrayList<>(List.of(new CityModel("Mashhad", 36.2605, 59.6168)));
     public static List<CityModel> getCities() {
         List<CityModel> cities = new ArrayList<>();
         cities.add(new CityModel("Tehran", 35.6892, 51.3890));

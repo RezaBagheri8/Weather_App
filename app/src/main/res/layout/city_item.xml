@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/container_weather_widget"
+    android:layout_width="match_parent"
+    android:layout_height="184dp">
+
+  <ImageView
+    android:id="@+id/img_rectangle"
+    android:layout_width="match_parent"
+    android:layout_height="184dp"
+    android:layout_marginTop="1dp"
+      app:layout_constraintBottom_toBottomOf="parent"
+      app:layout_constraintTop_toTopOf="parent"
+      app:layout_constraintLeft_toLeftOf="parent"
+      app:layout_constraintRight_toRightOf="parent"
+    android:src="@drawable/img_rectangle" />
+
+  <TextView
+      android:id="@+id/txt_mid_rain"
+      android:layout_width="wrap_content"
+      android:layout_height="18dp"
+      android:text="Mid Rain"
+      android:textColor="#FFFFFFFF"
+      android:textSize="16dp"
+      app:layout_constraintBottom_toBottomOf="parent"
+      app:layout_constraintHorizontal_bias="0.799"
+      app:layout_constraintLeft_toLeftOf="parent"
+      app:layout_constraintRight_toRightOf="parent"
+      app:layout_constraintTop_toTopOf="parent"
+      app:layout_constraintVertical_bias="0.915" />
+
+  <TextView
+    android:id="@+id/country_txt"
+    android:layout_width="wrap_content"
+    android:layout_height="20dp"
+    android:text="Iran"
+    android:textColor="#FFEBEBF5"
+    android:textSize="18dp"
+      app:layout_constraintBottom_toBottomOf="parent"
+      app:layout_constraintHorizontal_bias="0.199"
+      app:layout_constraintLeft_toLeftOf="parent"
+      app:layout_constraintRight_toRightOf="parent"
+      app:layout_constraintTop_toTopOf="parent"
+      app:layout_constraintVertical_bias="0.855" />
+
+  <TextView
+    android:id="@+id/city_name"
+    android:layout_width="wrap_content"
+    android:layout_height="77dp"
+    android:text="Montreal"
+    android:textColor="#FFFFFFFF"
+    android:textSize="34dp"
+      app:layout_constraintBottom_toBottomOf="parent"
+      app:layout_constraintHorizontal_bias="0.199"
+      app:layout_constraintLeft_toLeftOf="parent"
+      app:layout_constraintRight_toRightOf="parent"
+      app:layout_constraintTop_toTopOf="parent"
+      app:layout_constraintVertical_bias="0.555"
+      />
+  
+
+
+    <ImageView
+      android:id="@+id/img_moon_cloud_mid_rain"
+      android:layout_width="140dp"
+      android:layout_height="140dp"
+      android:scaleType="centerCrop"
+      android:src="@drawable/sunny"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintHorizontal_bias="0.840"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.200"
+        />
+</androidx.constraintlayout.widget.ConstraintLayout>

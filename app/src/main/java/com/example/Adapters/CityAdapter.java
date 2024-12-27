@@ -7,6 +7,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.firstapp.R;
 import com.example.weather.data.CityModel;
 
 import java.util.List;
@@ -29,7 +30,7 @@ public class CityAdapter extends RecyclerView.Adapter<CityAdapter.CityViewHolder
     @Override
     public CityViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext())
-                .inflate(android.R.layout.simple_list_item_1, parent, false);
+                .inflate(R.layout.city_item, parent, false);
         return new CityViewHolder(view);
     }
 
@@ -50,7 +51,7 @@ public class CityAdapter extends RecyclerView.Adapter<CityAdapter.CityViewHolder
 
         public CityViewHolder(@NonNull View itemView) {
             super(itemView);
-            cityName = itemView.findViewById(android.R.id.text1);
+            cityName = itemView.findViewById(R.id.city_name);
         }
     }
 }

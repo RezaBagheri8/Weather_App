@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <style name="Theme.MyApp.Dialog" parent="Theme.MaterialComponents.DayNight.Dialog">
+        <item name="dialogCornerRadius">16dp</item>
+    </style>
+</resources>
