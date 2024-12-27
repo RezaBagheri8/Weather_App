@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/city_details_skeleton_container"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:padding="50dp"
+    android:visibility="visible"
+    app:layout_constraintBottom_toBottomOf="parent"
+    app:layout_constraintEnd_toEndOf="parent"
+    app:layout_constraintHorizontal_bias="0.498"
+    app:layout_constraintStart_toStartOf="parent"
+    app:layout_constraintTop_toTopOf="parent"
+    app:layout_constraintVertical_bias="0.044">
+
+    <View
+        android:id="@+id/city_name_skeleton"
+        android:layout_width="195dp"
+        android:layout_height="40dp"
+        android:layout_gravity="center"
+        android:background="@drawable/skeleton_background" />
+
+    <View
+        android:id="@+id/temperature_skeleton"
+        android:layout_width="100dp"
+        android:layout_height="75dp"
+        android:layout_gravity="center"
+        android:layout_marginTop="20dp"
+        android:background="@drawable/skeleton_background" />
+
+    <View
+        android:id="@+id/weather_condition_skeleton"
+        android:layout_width="100dp"
+        android:layout_height="25dp"
+        android:layout_gravity="center"
+        android:layout_marginTop="15dp"
+        android:background="@drawable/skeleton_background" />
+
+    <View
+        android:id="@+id/high_low_skeleton"
+        android:layout_width="120dp"
+        android:layout_height="20dp"
+        android:layout_gravity="center"
+        android:layout_marginTop="7dp"
+        android:background="@drawable/skeleton_background" />
+
+</LinearLayout>
