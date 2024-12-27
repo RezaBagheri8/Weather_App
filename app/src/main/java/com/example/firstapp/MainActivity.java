@@ -255,6 +255,9 @@ public class MainActivity extends AppCompatActivity {
                 double longitude = location.getLongitude();
 
                 weatherViewModel.fetchWeather(latitude, longitude);
+
+                TextView cityNameTxt = findViewById(R.id.text_city_name);
+                cityNameTxt.setText("Your Location");
             } else {
                 Toast.makeText(MainActivity.this, "Unable to get location", Toast.LENGTH_SHORT).show();
             }
