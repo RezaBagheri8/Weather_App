@@ -185,7 +185,8 @@ public class MainActivity extends AppCompatActivity {
                 if(Objects.equals(city, null))
                     city = "Mashhad";
 
-                cityNameTxt.setText(city);
+                if(!cityNameTxt.getText().equals("Your Location"))
+                    cityNameTxt.setText(city);
                 temperatureTxt.setText(Double.toString(current.getTemperature2m()));
                 weatherConditionTxt.setText("Mostly Clear");
                 highLowTempTxt.setText(MessageFormat.format("H:{0}°   L:{1}°", maximumTemp, minimumTemp));

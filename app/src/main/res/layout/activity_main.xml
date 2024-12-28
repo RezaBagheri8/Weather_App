@@ -27,7 +27,6 @@
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintVertical_bias="0.044">
 
-            <!-- City Name -->
             <TextView
                 android:id="@+id/text_city_name"
                 android:layout_width="wrap_content"
@@ -82,7 +81,6 @@
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintVertical_bias="0.549" />
 
-        <!-- city weather details skeleton -->
         <include
             android:id="@+id/city_details_skeleton_container"
             layout="@layout/city_details_skeleton"
@@ -91,7 +89,6 @@
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
-    <!-- Bottom Sheet -->
     <include layout="@layout/bottom_sheet"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintHorizontal_bias="0.498"

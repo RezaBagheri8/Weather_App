@@ -1,6 +1,5 @@
 <layer-list xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <!-- Background Gradient -->
     <item>
         <shape>
             <size
@@ -14,7 +13,6 @@
         </shape>
     </item>
 
-    <!-- White Line -->
     <item android:top="10dp" android:gravity="top">
         <shape>
             <size
